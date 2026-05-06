@@ -2,60 +2,137 @@
 
 import { useState, useEffect } from "react";
 import { Todo } from "../types";
+import {
+    getTodos,
+    addTodoAction,
+    toggleTodoAction,
+    deleteTodoAction,
+} from "../actions";
 
 export function useTodoState() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
+    const [todos, setTodos] = useState<Todo[]>([]);
+    const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load todos from localStorage on initial render
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("learn-next-todos");
-      if (saved) {
-        setTodos(JSON.parse(saved));
-      }
-    } catch (e) {
-      console.error("Failed to parse todos from localStorage:", e);
-    } finally {
-      setIsInitialized(true);
-    }
-  }, []);
+    const addTodo = async (title: string) => {
+        if (!title.trim()) return;
 
-  // Save todos to localStorage whenever they change
-  useEffect(() => {
-    if (isInitialized) {
-      localStorage.setItem("learn-next-todos", JSON.stringify(todos));
-    }
-  }, [todos, isInitialized]);
+        // Optimistic Update: Add to UI immediately for lightning-fast feel
+        const tempId = crypto.randomUUID();
+        const tempTodo: Todo = {
+            id: tempId,
+            title: title.trim(),
+            completed: false,
+            createdAt: new Date().toISOString(),
+        };
+        setTodos((prev) => [tempTodo, ...prev]);
 
-  const addTodo = (title: string) => {
-    if (!title.trim()) return;
-    const newTodo: Todo = {
-      id: crypto.randomUUID(),
-      title: title.trim(),
-      completed: false,
-      createdAt: new Date().toISOString(),
+        const result = await addTodoAction(title);
+        if (result.error) {
+            // Rollback if failed
+            setTodos((prev) => prev.filter((t) => t.id !== tempId));
+        } else if (result.todo) {
+            // Replace temp todo with actual database todo
+            setTodos((prev) =>
+                prev.map((t) =>
+                    t.id === tempId
+                        ? {
+                              id: result.todo.id,
+                              title: result.todo.title,
+                              completed: result.todo.completed,
+                              createdAt:
+                                  result.todo.createdAt instanceof Date
+                                      ? result.todo.createdAt.toISOString()
+                                      : String(result.todo.createdAt),
+                          }
+                        : t,
+                ),
+            );
+        }
     };
-    setTodos((prev) => [newTodo, ...prev]);
-  };
 
-  const toggleTodo = (id: string) => {
-    setTodos((prev) =>
-      prev.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
-  };
+    const toggleTodo = async (id: string) => {
+        const originalTodo = todos.find((t) => t.id === id);
+        if (!originalTodo) return;
 
-  const deleteTodo = (id: string) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
-  };
+        const newCompleted = !originalTodo.completed;
 
-  return {
-    todos,
-    isInitialized,
-    addTodo,
-    toggleTodo,
-    deleteTodo,
-  };
+        // Optimistic Update
+        setTodos((prev) =>
+            prev.map((todo) =>
+                todo.id === id ? { ...todo, completed: newCompleted } : todo,
+            ),
+        );
+
+        const result = await toggleTodoAction(id, newCompleted);
+        if (result.error) {
+            // Rollback if failed
+            setTodos((prev) =>
+                prev.map((todo) =>
+                    todo.id === id
+                        ? { ...todo, completed: originalTodo.completed }
+                        : todo,
+                ),
+            );
+        }
+    };
+
+    const deleteTodo = async (id: string) => {
+        const originalTodo = todos.find((t) => t.id === id);
+        if (!originalTodo) return;
+
+        // Optimistic Update
+        setTodos((prev) => prev.filter((todo) => todo.id !== id));
+
+        const result = await deleteTodoAction(id);
+        if (result.error) {
+            // Rollback if failed
+            setTodos((prev) =>
+                [...prev, originalTodo].sort((a, b) =>
+                    b.createdAt.localeCompare(a.createdAt),
+                ),
+            );
+        }
+    };
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const loadTodos = async () => {
+            try {
+                const data = await getTodos();
+                if (!isMounted) return;
+                
+                const formatted: Todo[] = data.map((todo) => ({
+                    id: todo.id,
+                    title: todo.title,
+                    completed: todo.completed,
+                    createdAt:
+                        todo.createdAt instanceof Date
+                            ? todo.createdAt.toISOString()
+                            : String(todo.createdAt),
+                }));
+                setTodos(formatted);
+            } catch (e) {
+                console.error("Failed to load todos from database:", e);
+            } finally {
+                if (isMounted) {
+                    setIsInitialized(true);
+                }
+            }
+        };
+
+        loadTodos();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    return {
+        todos,
+        isInitialized,
+        addTodo,
+        toggleTodo,
+        deleteTodo,
+    };
 }
