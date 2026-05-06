@@ -26,7 +26,7 @@ export default function TodoLayout({
                         </h2>
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse" />
+                        <span className="w-2.5 h-2.5 bg-amber-500 rounded-full animate-pulse" />
                         <span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
                             Active Environment
                         </span>

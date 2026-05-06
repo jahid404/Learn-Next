@@ -21,24 +21,30 @@ export default function Home() {
                         Let&apos;s start with a simple Todo App to learn Next.js
                     </p>
                 </div>
-                <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
                     <Link
-                        className="flex text-sm text-nowrap h-10 items-center justify-center gap-2 rounded-full bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-95 shadow-md"
+                        className="flex text-sm text-nowrap h-11 items-center justify-center gap-2 rounded-xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-[0.98] shadow-md"
                         href="/todo"
                     >
                         Launch To-Do App
                     </Link>
                     <Link
-                        className="flex text-sm text-nowrap h-10 items-center justify-center gap-2 rounded-full bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-95 shadow-md"
+                        className="flex text-sm text-nowrap h-11 items-center justify-center gap-2 rounded-xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-[0.98] shadow-md"
                         href="/counter"
                     >
                         Launch Counter App (useState)
                     </Link>
                     <Link
-                        className="flex text-sm text-nowrap h-10 items-center justify-center gap-2 rounded-full bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-95 shadow-md"
+                        className="flex text-sm text-nowrap h-11 items-center justify-center gap-2 rounded-xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-[0.98] shadow-md"
                         href="/timer"
                     >
                         Launch Stopwatch (useEffect)
+                    </Link>
+                    <Link
+                        className="flex text-sm text-nowrap h-11 items-center justify-center gap-2 rounded-xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-[0.98] shadow-md"
+                        href="/notes"
+                    >
+                        Launch Notes App (Auto-Save)
                     </Link>
                 </div>
             </main>
