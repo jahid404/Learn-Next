@@ -23,10 +23,16 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
                     <Link
-                        className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-95 shadow-md"
+                        className="flex text-sm text-nowrap h-10 items-center justify-center gap-2 rounded-full bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-95 shadow-md"
                         href="/todo"
                     >
                         Launch To-Do App
+                    </Link>
+                    <Link
+                        className="flex text-sm text-nowrap h-10 items-center justify-center gap-2 rounded-full bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-95 shadow-md"
+                        href="/counter"
+                    >
+                        Launch Counter App
                     </Link>
                 </div>
             </main>
