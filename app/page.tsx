@@ -32,7 +32,13 @@ export default function Home() {
                         className="flex text-sm text-nowrap h-10 items-center justify-center gap-2 rounded-full bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-95 shadow-md"
                         href="/counter"
                     >
-                        Launch Counter App
+                        Launch Counter App (useState)
+                    </Link>
+                    <Link
+                        className="flex text-sm text-nowrap h-10 items-center justify-center gap-2 rounded-full bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-95 shadow-md"
+                        href="/timer"
+                    >
+                        Launch Stopwatch (useEffect)
                     </Link>
                 </div>
             </main>
