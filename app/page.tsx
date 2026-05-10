@@ -24,6 +24,18 @@ export default function Home() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
                     <Link
                         className="flex text-sm text-nowrap h-11 items-center justify-center gap-2 rounded-xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-[0.98] shadow-md"
+                        href="/basics"
+                    >
+                        Basics
+                    </Link>
+                    <Link
+                        className="flex text-sm text-nowrap h-11 items-center justify-center gap-2 rounded-xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-[0.98] shadow-md"
+                        href="/basics/state"
+                    >
+                        Basics State
+                    </Link>
+                    <Link
+                        className="flex text-sm text-nowrap h-11 items-center justify-center gap-2 rounded-xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-[0.98] shadow-md"
                         href="/todo"
                     >
                         To-Do App
