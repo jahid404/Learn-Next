@@ -1,10 +1,14 @@
-"use client";
-
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { LoginForm } from "@/features/auth/components/LoginForm";
+import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-export default function AuthPage() {
+export default async function AuthPage() {
+    const session = await getSession();
+    if (session) {
+        redirect("/dashboard");
+    }
     return (
         <div className="flex flex-col gap-6 max-w-lg w-full mx-auto mt-6">
             {/* Navigation back to Home */}
