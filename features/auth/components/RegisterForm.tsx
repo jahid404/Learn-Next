@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -10,6 +10,15 @@ import { useRouter } from "next/navigation";
 
 export function RegisterForm() {
     const router = useRouter();
+
+    // TIER 2 GUARD: Client-side redirect if token already exists in LocalStorage
+    useEffect(() => {
+        const token = localStorage.getItem("app_jwt_token");
+        if (token) {
+            router.push("/dashboard");
+        }
+    }, [router]);
+
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

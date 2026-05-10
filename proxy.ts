@@ -10,8 +10,10 @@ export async function proxy(request: NextRequest) {
     const path = request.nextUrl.pathname;
 
     // 2. Check if the current path is a protected or auth route
-    const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route));
-    const isAuthRoute = authRoutes.some(route => path.startsWith(route));
+    const isProtectedRoute = protectedRoutes.some((route) =>
+        path.startsWith(route),
+    );
+    const isAuthRoute = authRoutes.some((route) => path.startsWith(route));
 
     // 3. Attempt to retrieve and decrypt the session cookie
     const cookie = request.cookies.get("session")?.value;
@@ -27,12 +29,10 @@ export async function proxy(request: NextRequest) {
     }
 
     // 4. Redirect Logic
-    // Condition A: User tries to access a Protected Route but has NO valid session -> Boot to Login
-    if (isProtectedRoute && !session) {
-        return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
-    }
+    // [NOTE FOR LEARNER]: To support CLIENT-STORED JWTs, we relax this server-level blocking.
+    // If we blocked it here, the browser could never read its LocalStorage!
 
-    // Condition B: User tries to access Login/Register but ALREADY HAS an active session -> Boot to Dashboard
+    // Condition A: User is logged in? Block them from re-visiting sign-in pages
     if (isAuthRoute && session) {
         return NextResponse.redirect(new URL("/dashboard", request.nextUrl));
     }

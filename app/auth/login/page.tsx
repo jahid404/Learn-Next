@@ -2,6 +2,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { LoginForm } from "@/features/auth/components/LoginForm";
 
+import { Suspense } from "react";
+
 export default function AuthPage() {
     return (
         <div className="flex flex-col gap-6 max-w-lg w-full mx-auto mt-6">
@@ -26,7 +28,9 @@ export default function AuthPage() {
                     </div>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center gap-6">
-                    <LoginForm />
+                    <Suspense fallback={<div>Loading form...</div>}>
+                        <LoginForm />
+                    </Suspense>
                 </CardContent>
             </Card>
         </div>

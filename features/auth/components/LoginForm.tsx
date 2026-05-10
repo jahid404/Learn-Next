@@ -1,14 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { loginUser } from "@/features/auth/actions/loginAction";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export function LoginForm() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const isJwtMode = searchParams.get("mode") === "jwt";
+
+    // TIER 2 GUARD: Client-side redirect if token already exists in LocalStorage
+    useEffect(() => {
+        const token = localStorage.getItem("app_jwt_token");
+        if (token) {
+            router.push("/dashboard");
+        }
+    }, [router]);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -26,16 +37,24 @@ export function LoginForm() {
         formData.append("email", email);
         formData.append("password", password);
 
-        const result = await loginUser(formData);
+        // Pass flag to server action to branch behavior
+        const result = await loginUser(formData, isJwtMode);
 
         setIsLoading(false);
 
         if (result.error) {
             setFeedback({ type: "error", message: result.error });
         } else {
+            // Handled by local logic if returned in body
+            if (isJwtMode && result.token) {
+                localStorage.setItem("app_jwt_token", result.token);
+            }
+
             setFeedback({
                 type: "success",
-                message: "Successfully logged in! Redirecting...",
+                message: isJwtMode
+                    ? "Successfully signed in via JWT! (Token stored in LocalStorage)"
+                    : "Successfully logged in via Cookies! Redirecting...",
             });
 
             setTimeout(() => {
@@ -58,6 +77,7 @@ export function LoginForm() {
                     {feedback.message}
                 </div>
             )}
+
             <form
                 onSubmit={handleSubmit}
                 className="w-full flex flex-col gap-4"
