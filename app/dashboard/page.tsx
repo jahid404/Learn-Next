@@ -1,4 +1,3 @@
-import React from "react";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -9,13 +8,6 @@ import Link from "next/link";
 export default async function DashboardPage() {
     const session = await getSession();
 
-    // If there's no active session token, boot them back to the login screen immediately.
-    if (!session) {
-        redirect("/auth/login");
-    }
-
-    // Server Action handler directly inside Client Component context via wrapper,
-    // but here since this page is a server component we'll bind the action to a trivial form or button.
     const handleLogout = async () => {
         "use server";
         await logoutUser();
@@ -30,10 +22,10 @@ export default async function DashboardPage() {
                         👋
                     </div>
                     <CardTitle className="text-2xl">
-                        Welcome, {session.name || "User"}!
+                        Welcome, {session?.name || "User"}!
                     </CardTitle>
                     <p className="text-zinc-500 dark:text-zinc-400 text-sm">
-                        {session.email}
+                        {session?.email}
                     </p>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
