@@ -33,20 +33,28 @@ export function LoginForm() {
         if (result.error) {
             setFeedback({ type: "error", message: result.error });
         } else {
-            setFeedback({ type: "success", message: "Successfully logged in! Redirecting..." });
-            router.push("/dashboard");
-            router.refresh(); // Forces the layout/server components to re-run to detect cookie
+            setFeedback({
+                type: "success",
+                message: "Successfully logged in! Redirecting...",
+            });
+
+            setTimeout(() => {
+                router.push("/dashboard");
+                router.refresh();
+            }, 1500);
         }
     };
 
     return (
         <>
             {feedback && (
-                <div className={`w-full p-3 rounded-xl text-sm font-medium mb-2 ${
-                    feedback.type === 'error' 
-                        ? 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-800' 
-                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800'
-                }`}>
+                <div
+                    className={`w-full p-3 rounded-xl text-sm font-medium mb-2 ${
+                        feedback.type === "error"
+                            ? "bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-800"
+                            : "bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800"
+                    }`}
+                >
                     {feedback.message}
                 </div>
             )}
@@ -72,10 +80,26 @@ export function LoginForm() {
                     disabled={isLoading}
                     required
                 />
-                <Button type="submit" className="w-full mt-2" disabled={isLoading}>
+                <Button
+                    type="submit"
+                    className="w-full mt-2"
+                    disabled={isLoading}
+                >
                     {isLoading ? "Signing In..." : "Sign In"}
                 </Button>
             </form>
+            <Button
+                type="button"
+                variant="ghost"
+                className="w-full mt-0"
+                disabled={isLoading}
+                onClick={() => {
+                    setEmail("buhynu@mailinator.com");
+                    setPassword("Pa$$w0rd!");
+                }}
+            >
+                Quick Login
+            </Button>
             <div className="flex justify-center items-center mt-4">
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
                     Don&apos;t have an account?{" "}
