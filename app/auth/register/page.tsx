@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { RegisterForm } from "@/features/auth/components/RegisterForm";
 
 export default function AuthPage() {
     return (
@@ -19,15 +19,15 @@ export default function AuthPage() {
                 <CardHeader>
                     <div className="flex justify-between items-start">
                         <div>
-                            <CardTitle>Authentication</CardTitle>
+                            <CardTitle>Create an account</CardTitle>
                             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-                                Authentication and Authorization
+                                Enter your information to get started.
                             </p>
                         </div>
                     </div>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center gap-6">
-                    <div></div>
+                    <RegisterForm />
                 </CardContent>
             </Card>
         </div>
