@@ -70,6 +70,12 @@ export default function Home() {
                     >
                         Authentication (JWT)
                     </Link>
+                    <Link
+                        className="flex text-sm text-nowrap h-11 items-center justify-center gap-2 rounded-xl bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 px-5 transition-all font-semibold active:scale-[0.98] shadow-md"
+                        href="/al-quran"
+                    >
+                        Al Quran (Player)
+                    </Link>
                 </div>
             </main>
         </div>
